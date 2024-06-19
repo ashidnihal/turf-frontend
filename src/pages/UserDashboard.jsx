@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import TurfCard from '../Components/TurfCard';
-import { Link } from 'react-router-dom';
+import { Link ,useNavigate} from 'react-router-dom';
 import { FormControl, InputGroup } from 'react-bootstrap';
 import { BsSearch } from 'react-icons/bs';
 import { allTurfAPI } from '../Services/allAPIs';
@@ -12,7 +12,12 @@ function UserDashboard({ setShowHeader }) {
   const [SearchKey, setSearchKey] = useState("");
   const [allUserTurf, setallUserTurf] = useState([]);
   const [userName, setUserName] = useState("");
-
+  const navigate = useNavigate();
+ 
+  const handleLogout = () => {
+    sessionStorage.clear();
+    navigate('/login');
+  };
   useEffect(() => {
     setUserName(sessionStorage.getItem('username')); // Set username when component mounts
     setShowHeader(false); // Hide the header when the component mounts
@@ -41,6 +46,11 @@ function UserDashboard({ setShowHeader }) {
     allTurf();
   }, [SearchKey]); // Call allTurf function when SearchKey changes
 
+    
+  const navbarToggleStyle = {
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundImage: "url(\"data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E\")"
+  };
   return (
     <div>
       <div className=' text-center bg-image' style={{ 
@@ -50,12 +60,12 @@ function UserDashboard({ setShowHeader }) {
         <header>
           <Navbar expand='lg' bg='transparent' variant='light'>
             <Container fluid>
-              <Navbar.Toggle aria-controls='navbarRightAlignExample' aria-expanded={openNavRight} onClick={() => setOpenNavRight(!openNavRight)} />
+              <Navbar.Toggle aria-controls='navbarRightAlignExample' aria-expanded={openNavRight} onClick={() => setOpenNavRight(!openNavRight)} style={navbarToggleStyle} />
               <Navbar.Collapse id='navbarRightAlignExample' className='justify-content-end'>
                 <Nav className='mb-2 mb-lg-0 me-5'>
                   <Link to={'/partner-with-us'} className="nav-link text-light me-5 fs-5 fw-bold">Add Turf</Link>
                   <NavDropdown className='fs-5 me-5' title={<span style={{ color: 'white', fontWeight: 'bold' }}>{userName}</span>} id='nav-dropdown'>
-                    <NavDropdown.Item  ><button className='btn btn-danger ms-3'>Logout</button></NavDropdown.Item>
+                    <NavDropdown.Item  ><button className='btn btn-danger ms-3'onClick={handleLogout}>Logout</button></NavDropdown.Item>
                   </NavDropdown>
                 </Nav>
               </Navbar.Collapse>
@@ -75,7 +85,7 @@ function UserDashboard({ setShowHeader }) {
           <InputGroup.Text id="basic-addon1">
             <BsSearch />
           </InputGroup.Text>
-          <FormControl onChange={e => setSearchKey(e.target.value)} placeholder="Search…" aria-label="Search" aria-describedby="basic-addon1" />
+          <FormControl onChange={e => setSearchKey(e.target.value)} placeholder="Search by location…" aria-label="Search" aria-describedby="basic-addon1" />
         </InputGroup>
       </div>
       {allUserTurf.length > 0 ? allUserTurf.map(item => (<TurfCard turf={item} />)) : "No such turf"}

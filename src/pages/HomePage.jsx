@@ -1,5 +1,6 @@
 import React from 'react';
 import { MDBBtn } from 'mdb-react-ui-kit';
+import { Link } from 'react-router-dom';
 
 function HomePage() {
   return (
@@ -16,7 +17,7 @@ function HomePage() {
             <div className='text-white'>
               <h1 className='mb-3'>Welcome to TurfEase</h1>
               <h4 className='mb-3'>Your premier destination for hassle-free turf bookings</h4>
-              <MDBBtn tag="a" outline size="lg" color="light"> {/* Use color="light" to set button color to light */}
+              <MDBBtn tag={Link} to="/login" outline size="lg" color="light"> {/* Use color="light" to set button color to light */}
                 Join Our Club
               </MDBBtn>
             </div>
